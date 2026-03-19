@@ -1,11 +1,11 @@
 ﻿public class Contrato
 {
     public string Imovel { get; private set; } //Mudar de string para tipo Complexo assim que o mesmo tiver pronto
-    public string Inquilino { get; private set; } //Mudar de string para tipo Complexo assim que o mesmo tiver pronto
+    public Inquilino Inquilino { get; private set; } //Tipo Mudado para Inquilino, após criação. BY: Bruno
     public double ValorMensal { get; private set; }
     public bool Ativo { get; private set; }
 
-    public void Gerar(string imovel, string inquilino, double valorMensal)
+    public void Gerar(string imovel, Inquilino inquilino, double valorMensal)
     {
         Imovel = imovel;
         Inquilino = inquilino;
@@ -28,7 +28,42 @@
     }
 }
 
+public class Inquilino
+{
+    public string Nome { get; private set; }
+    public string Contato { get; private set; }
+    public Contrato Contrato { get; private set; }
+    public List<string> Reclamacoes { get; private set; } = new List<string>();
 
+    public Inquilino(string nome, string contato)
+    {
+        Nome = nome;
+        Contato = contato;
+    }
+
+    public void EnviarProposta(string imovel, double valorProposto) //Mudar de string para tipo Complexo (Imovel) assim que o mesmo estiver pronto
+    {
+        Console.WriteLine($"{Nome} enviou proposta para o imovel: {imovel} no valor de R$ {valorProposto}");
+    }
+
+    public void AssinarContrato(Contrato contrato)
+    {
+        if (contrato == null)
+        {
+            Console.WriteLine("Contrato inválido.");
+            return;
+        }
+
+        Contrato = contrato;
+        Console.WriteLine($"{Nome} assinou o contrato. Valor mensal: R$ {contrato.ValorMensal}");
+    }
+
+    public void RegistrarReclamacao(string descricao)
+    {
+        Reclamacoes.Add(descricao);
+        Console.WriteLine($"Reclamação registrada pelo {Nome}: {descricao}");
+    }
+}
 
 internal class Program
 {
