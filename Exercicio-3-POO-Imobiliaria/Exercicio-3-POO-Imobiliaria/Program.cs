@@ -1,4 +1,29 @@
-﻿public class Contrato
+﻿public class Imovel
+{
+    public bool Disponivel { get; private set; }
+
+    public Imovel(bool disponivel)
+    {
+        Disponivel = disponivel;
+    }
+
+    public void MarcarComoDisponivel()
+    {
+        Disponivel = true;
+    }
+
+    public void MarcarComoIndisponivel()
+    {
+        Disponivel = false;
+    }
+
+    public double CalcularAluguelComTaxas(double valorAluguel, double taxa, double tempo)
+    {
+        return (valorAluguel * tempo) + taxa;
+    }
+
+}
+public class Contrato
 {
     public string Imovel { get; private set; } //Mudar de string para tipo Complexo assim que o mesmo tiver pronto
     public Inquilino Inquilino { get; private set; } //Tipo Mudado para Inquilino, após criação. BY: Bruno
