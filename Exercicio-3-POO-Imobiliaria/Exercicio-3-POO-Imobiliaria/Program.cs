@@ -65,6 +65,48 @@ public class Inquilino
     }
 }
 
+public class Imovel
+{
+    public bool Disponivel;
+//Classe ja criada pra não dar erro
+}
+
+public class Imobiliaria
+{
+    private List<Imovel> imoveis;
+    private List<string> visitas;
+
+    public Imobiliaria()
+    {
+        imoveis = new List<Imovel>();
+        visitas = new List<string>();
+    }
+
+    public void CadastrarImovel(Imovel imovel)
+    {
+        imoveis.Add(imovel);
+    }
+
+    public void AgendarVisita(Imovel imovel, string data)
+    {
+        visitas.Add("Visita agendada para o imóvel na data: " + data);
+    }
+
+    public List<Imovel> ListarDisponiveis()
+    {
+        List<Imovel> disponiveis = new List<Imovel>();
+
+        foreach (Imovel i in imoveis)
+        {
+            if (i.Disponivel)
+            {
+                disponiveis.Add(i);
+            }
+        }
+
+        return disponiveis;
+    }
+}
 internal class Program
 {
     private static void Main(string[] args)
