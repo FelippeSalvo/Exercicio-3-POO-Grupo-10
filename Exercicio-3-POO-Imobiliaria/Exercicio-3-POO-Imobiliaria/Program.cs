@@ -155,7 +155,7 @@ public class Proprietario
 
     public void RemoverImovel(Imovel imovel)
     {
-        if (contratos.Any(c => c.Ativo && c.Imovel == imovel?.ToString()))
+        if (contratos.Any(c => c.Ativo && c.Imovel == imovel))
         {
             Console.WriteLine("Não é possível remover um imóvel com contrato ativo.");
             return;
@@ -178,14 +178,14 @@ public class Proprietario
             return null;
         }
 
-        if (contratos.Any(c => c.Ativo && c.Imovel == imovel?.ToString()))
+        if (contratos.Any(c => c.Ativo && c.Imovel == imovel))
         {
             Console.WriteLine("Este imóvel já possui um contrato ativo.");
             return null;
         }
 
         var contrato = new Contrato();
-        contrato.Gerar(imovel?.ToString(), inquilino, valorMensal); //Substituir imovel?.ToString() por imovel diretamente quando a classe Imovel estiver pronta
+        contrato.Gerar(imovel, inquilino, valorMensal); 
         contratos.Add(contrato);
         inquilino.AssinarContrato(contrato);
         Console.WriteLine($"Contrato gerado por {Nome} para {inquilino.Nome}. Valor mensal: R$ {valorMensal:F2}");
@@ -245,6 +245,28 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        Console.WriteLine("Paga meus 35 real Bruno karai");
+            Imovel imovel = new Imovel(true);
+            Inquilino inquilino = new Inquilino("Bruno", "99999-9999");
+            Proprietario proprietario = new Proprietario("Igor", "123.456.789-00", "88888-8888");
+            Imobiliaria imobiliaria = new Imobiliaria();
+
+            proprietario.AdicionarImovel(imovel);
+            imobiliaria.CadastrarImovel(imovel);
+
+            Console.WriteLine("Imóveis disponíveis: " + imobiliaria.ListarDisponiveis().Count);
+        
+            inquilino.EnviarProposta(imovel, 1200);
+        
+            Contrato contrato = proprietario.GerarContrato(imovel, inquilino, 1200);
+        
+            proprietario.ExibirResumoFinanceiro();
+
+            inquilino.RegistrarReclamacao("Chuveiro não funciona");
+
+            proprietario.RescinidirContrato(contrato);
+
+            proprietario.ExibirResumoFinanceiro();
+
+        
     }
 }
