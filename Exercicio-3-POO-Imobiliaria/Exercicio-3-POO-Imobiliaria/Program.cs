@@ -1,25 +1,50 @@
-﻿public class Contrato
+﻿public class Imovel
 {
-    public string Imovel { get; private set; } //Mudar de string para tipo Complexo assim que o mesmo tiver pronto
-    public Inquilino Inquilino { get; private set; } //Tipo Mudado para Inquilino, após criação. BY: Bruno
+    public bool Disponivel { get; private set; }
+
+    public Imovel(bool disponivel)
+    {
+        Disponivel = disponivel;
+    }
+
+    public void MarcarComoDisponivel()
+    {
+        Disponivel = true;
+    }
+
+    public void MarcarComoIndisponivel()
+    {
+        Disponivel = false;
+    }
+
+    public double CalcularAluguelComTaxas(double valorAluguel, double taxa, double tempo)
+    {
+        return (valorAluguel * tempo) + taxa;
+    }
+
+}
+public class Contrato
+{
+    public Imovel Imovel { get; private set; } 
+    public Inquilino Inquilino { get; private set; } 
     public double ValorMensal { get; private set; }
     public bool Ativo { get; private set; }
 
-    public void Gerar(string imovel, Inquilino inquilino, double valorMensal)
+    public void Gerar(Imovel imovel, Inquilino inquilino, double valorMensal)
     {
         Imovel = imovel;
         Inquilino = inquilino;
         ValorMensal = valorMensal;
         Ativo = true;
 
-        //Imovel.MarcarComoIndisponivel(); Método de outra classe, descomentar essa linha assim que a mesma estiver pronta 
+        Imovel.MarcarComoIndisponivel();
     }
 
     public void Rescindir()
     {
         Ativo = false;
 
-        //Imovel.MarcarComoDisponivel(); Método de outra classe, descomentar essa linha assim que a mesma estiver pronta
+        Imovel.MarcarComoDisponivel();
     }
 
     public double CalcularMulta(double percentual)
@@ -41,7 +66,7 @@ public class Inquilino
         Contato = contato;
     }
 
-    public void EnviarProposta(string imovel, double valorProposto) //Mudar de string para tipo Complexo (Imovel) assim que o mesmo estiver pronto
+    public void EnviarProposta(Imovel imovel, double valorProposto)
     {
         Console.WriteLine($"{Nome} enviou proposta para o imovel: {imovel} no valor de R$ {valorProposto}");
     }
@@ -65,6 +90,42 @@ public class Inquilino
     }
 }
 
+public class Imobiliaria
+{
+    private List<Imovel> imoveis;
+    private List<string> visitas;
+
+    public Imobiliaria()
+    {
+        imoveis = new List<Imovel>();
+        visitas = new List<string>();
+    }
+
+    public void CadastrarImovel(Imovel imovel)
+    {
+        imoveis.Add(imovel);
+    }
+
+    public void AgendarVisita(Imovel imovel, string data)
+    {
+        visitas.Add("Visita agendada para o imóvel na data: " + data);
+    }
+
+    public List<Imovel> ListarDisponiveis()
+    {
+        List<Imovel> disponiveis = new List<Imovel>();
+
+        foreach (Imovel i in imoveis)
+        {
+            if (i.Disponivel)
+            {
+                disponiveis.Add(i);
+            }
+        }
+
+        return disponiveis;
+    }
+}
 
 public class Proprietario
 {
