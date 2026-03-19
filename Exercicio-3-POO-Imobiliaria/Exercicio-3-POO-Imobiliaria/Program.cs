@@ -25,26 +25,26 @@
 }
 public class Contrato
 {
-    public string Imovel { get; private set; } //Mudar de string para tipo Complexo assim que o mesmo tiver pronto
-    public Inquilino Inquilino { get; private set; } //Tipo Mudado para Inquilino, após criação. BY: Bruno
+    public Imovel Imovel { get; private set; } 
+    public Inquilino Inquilino { get; private set; } 
     public double ValorMensal { get; private set; }
     public bool Ativo { get; private set; }
 
-    public void Gerar(string imovel, Inquilino inquilino, double valorMensal)
+    public void Gerar(Imovel imovel, Inquilino inquilino, double valorMensal)
     {
         Imovel = imovel;
         Inquilino = inquilino;
         ValorMensal = valorMensal;
         Ativo = true;
 
-        //Imovel.MarcarComoIndisponivel(); Método de outra classe, descomentar essa linha assim que a mesma estiver pronta 
+        Imovel.MarcarComoIndisponivel();
     }
 
     public void Rescindir()
     {
         Ativo = false;
 
-        //Imovel.MarcarComoDisponivel(); Método de outra classe, descomentar essa linha assim que a mesma estiver pronta
+        Imovel.MarcarComoDisponivel();
     }
 
     public double CalcularMulta(double percentual)
@@ -66,7 +66,7 @@ public class Inquilino
         Contato = contato;
     }
 
-    public void EnviarProposta(string imovel, double valorProposto) //Mudar de string para tipo Complexo (Imovel) assim que o mesmo estiver pronto
+    public void EnviarProposta(Imovel imovel, double valorProposto)
     {
         Console.WriteLine($"{Nome} enviou proposta para o imovel: {imovel} no valor de R$ {valorProposto}");
     }
@@ -88,12 +88,6 @@ public class Inquilino
         Reclamacoes.Add(descricao);
         Console.WriteLine($"Reclamação registrada pelo {Nome}: {descricao}");
     }
-}
-
-public class Imovel
-{
-    public bool Disponivel;
-//Classe ja criada pra não dar erro
 }
 
 public class Imobiliaria
