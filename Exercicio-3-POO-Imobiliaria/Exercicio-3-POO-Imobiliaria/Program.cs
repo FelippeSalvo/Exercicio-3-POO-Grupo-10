@@ -65,6 +65,121 @@ public class Inquilino
     }
 }
 
+
+public class Proprietario
+{
+    public string Nome { get; private set; }
+    public string CPF { get; private set; }
+    public string Contato { get; private set; }
+    private List<Imovel> imoveis = new List<Imovel>();
+    private List<Contrato> contratos = new List<Contrato>();
+
+    public Proprietario(string nome, string cpf, string contato)
+    {
+        Nome = nome;
+        CPF = cpf;
+        Contato = contato;
+    }
+
+    public void AdicionarImovel(Imovel imovel)
+    {
+        if (imovel == null)
+        {
+            Console.WriteLine("Imóvel inválido.");
+            return;
+        }
+        imoveis.Add(imovel);
+        Console.WriteLine($"Imóvel adicionado ao portfólio de {Nome}.");
+    }
+
+    public void RemoverImovel(Imovel imovel)
+    {
+        if (contratos.Any(c => c.Ativo && c.Imovel == imovel?.ToString()))
+        {
+            Console.WriteLine("Não é possível remover um imóvel com contrato ativo.");
+            return;
+        }
+        imoveis.Remove(imovel);
+        Console.WriteLine($"Imóvel removido do portfólio de {Nome}.");
+    }
+
+    public List<Imovel> ListarImoveis()
+    {
+        return new List<Imovel>(imoveis);
+    }
+
+
+    public Contrato GerarContrato(Imovel imovel, Inquilino inquilino, double valorMensal)
+    {
+        if (!imoveis.Contains(imovel))
+        {
+            Console.WriteLine("Este imóvel não pertence a este proprietário.");
+            return null;
+        }
+
+        if (contratos.Any(c => c.Ativo && c.Imovel == imovel?.ToString()))
+        {
+            Console.WriteLine("Este imóvel já possui um contrato ativo.");
+            return null;
+        }
+
+        var contrato = new Contrato();
+        contrato.Gerar(imovel?.ToString(), inquilino, valorMensal); //Substituir imovel?.ToString() por imovel diretamente quando a classe Imovel estiver pronta
+        contratos.Add(contrato);
+        inquilino.AssinarContrato(contrato);
+        Console.WriteLine($"Contrato gerado por {Nome} para {inquilino.Nome}. Valor mensal: R$ {valorMensal:F2}");
+        return contrato;
+    }
+
+    public void RescinidirContrato(Contrato contrato)
+    {
+        if (contrato == null || !contratos.Contains(contrato))
+        {
+            Console.WriteLine("Contrato não encontrado no portfólio deste proprietário.");
+            return;
+        }
+        contrato.Rescindir();
+        Console.WriteLine($"Contrato rescindido por {Nome}.");
+    }
+
+    public List<Contrato> ListarContratos()
+    {
+        return new List<Contrato>(contratos);
+    }
+
+    public List<Contrato> ListarContratosAtivos()
+    {
+        return contratos.Where(c => c.Ativo).ToList();
+    }
+
+
+    public double CalcularReceitaMensal()
+    {
+        return contratos.Where(c => c.Ativo).Sum(c => c.ValorMensal);
+    }
+
+    public void ExibirResumoFinanceiro()
+    {
+        var ativos = ListarContratosAtivos();
+        Console.WriteLine($"=== Resumo Financeiro de {Nome} ===");
+        Console.WriteLine($"Imóveis cadastrados: {imoveis.Count}");
+        Console.WriteLine($"Contratos ativos: {ativos.Count}");
+        Console.WriteLine($"Receita mensal total: R$ {CalcularReceitaMensal():F2}");
+    }
+
+
+    public void AtualizarContato(string novoContato)
+    {
+        Contato = novoContato;
+        Console.WriteLine($"Contato de {Nome} atualizado para: {novoContato}");
+    }
+
+    public void ExibirDados()
+    {
+        Console.WriteLine($"Proprietário: {Nome} | CPF: {CPF} | Contato: {Contato}");
+    }
+}
+
 internal class Program
 {
     private static void Main(string[] args)
